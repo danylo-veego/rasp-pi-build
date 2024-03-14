@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#!/bin/bash
+
+# Check if exactly two arguments are provided
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 LOGIN PASSWORD"
+  exit 1
+fi
+
+# Assign arguments to variables
+LOGIN=$1
+PASSWORD=$2
+
+./setup.sh
+
+# Docker run command with environment variables for .netrc credentials
+sudo docker run -it --rm \
+  -e NETRC_LOGIN="$LOGIN" \
+  -e NETRC_PASSWORD="$PASSWORD" \
+  -v ./build/kirkstone:/home/builder/workspace \
+  rdk-pi-build-env:latest
