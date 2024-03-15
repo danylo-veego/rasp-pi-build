@@ -1,3 +1,6 @@
 /.idea/
-docker/.gitconfig
+/docker/.gitconfig
+/docker/.netrc
+/build/
 codealike.json
+!/workspace/

@@ -70,10 +70,6 @@ ENV NETRC_MACHINE=${netrc_machine}
 ENV NETRC_LOGIN=${netrc_login}
 ENV NETRC_PASSWORD=${netrc_password}
 
-# Create entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 # Create build script
 COPY build.sh /usr/local/bin/build.sh
 RUN chmod a+x /usr/local/bin/build.sh
@@ -91,12 +87,21 @@ USER builder
 
 RUN mkdir -p /home/builder/workspace
 
-COPY .gitconfig /home/builder/.gitconfig
+COPY --chown=builder .gitconfig /home/builder/.gitconfig
+COPY --chown=builder .netrc /home/builder/.netrc
+RUN chmod 600 /home/builder/.netrc
+RUN chmod 600 /home/builder/.gitconfig
 
 # Set work directory
 WORKDIR /home/builder/
 
+#RUN mkdir -p "$HOME/bin"
+#RUN echo 'export PATH="$HOME/bin:$PATH"' >> "$HOME/.bashrc"
+#RUN curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > "$HOME/bin/repo"
+#RUN chmod a+x "$HOME/bin/repo"
+#RUN which repo
+
 # Entry point
 # ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash", "/usr/local/bin/build.sh"]
+CMD ["/bin/bash"]
 

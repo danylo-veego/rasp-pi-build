@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -rf build/kirkstone
+mkdir -p build/kirkstone
