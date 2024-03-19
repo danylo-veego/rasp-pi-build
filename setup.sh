@@ -2,11 +2,9 @@
 
 mkdir -p build/kirkstone
 
-
-
 if [ ! -f "docker/.gitconfig" ]; then
   echo "No .gitconfig found in docker/ or $HOME"
-  if [ "$#" -lt "$4" ]; then
+  if [ "$#" -lt "4" ]; then
     if [ -f "$HOME/.gitconfig" ]; then
       echo "Using $HOME/.gitconfig"
       cp "$HOME/.gitconfig" docker/.gitconfig

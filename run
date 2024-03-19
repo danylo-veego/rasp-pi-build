@@ -1,8 +1,12 @@
 #!/bin/bash
 
-./clean
 ./build-image.sh
 
 # Docker run command
-sudo docker run -it --rm rdk-pi-build-env:latest "$@"
-#-v ./build/kirkstone:/home/builder/workspace \
+sudo docker run \
+  -it \
+  --rm \
+  -v ./build/kirkstone:/home/builder/workspace \
+  rdk-pi-build-env:latest \
+  "$@"
+

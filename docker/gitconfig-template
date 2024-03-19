@@ -2,3 +2,6 @@
 [user]
 	name = NAME
 	email = EMAIL
+
+[color]
+	ui = auto

@@ -26,11 +26,13 @@ RUN apt-get update && apt-get install -y \
   libsdl1.2-dev \
   libtool \
   libtool-bin \
+  lz4 \
   m4 \
   openjdk-8-jdk \
   openjdk-8-jre \
   pkg-config \
   pylint3 \
+  python2 \
   python3 \
   python3-git \
   python3-jinja2 \
@@ -41,7 +43,8 @@ RUN apt-get update && apt-get install -y \
   unzip \
   wget \
   xterm \
-  xz-utils
+  xz-utils \
+  zstd
 
 # Additional configuration for locale and user
 RUN apt-get update && apt-get install -y locales \
@@ -74,13 +77,16 @@ ENV NETRC_PASSWORD=${netrc_password}
 COPY build.sh /usr/local/bin/build.sh
 RUN chmod a+x /usr/local/bin/build.sh
 
+# Set the python symlink to python2
+RUN ln -s /usr/bin/python2 /usr/bin/python
+
 # Arguments for user ID and group ID
 ARG user_id=1000
 ARG group_id=1000
 
 # Create a non-root user for builder builds
-RUN groupadd -g ${group_id} builder && \
-    useradd -m -u ${user_id} -g builder -s /bin/bash builder
+RUN groupadd -g "${group_id}" builder && \
+    useradd -m -u "${user_id}" -g builder -s /bin/bash builder
 
 # Switch to builder user
 USER builder
@@ -95,13 +101,6 @@ RUN chmod 600 /home/builder/.gitconfig
 # Set work directory
 WORKDIR /home/builder/
 
-#RUN mkdir -p "$HOME/bin"
-#RUN echo 'export PATH="$HOME/bin:$PATH"' >> "$HOME/.bashrc"
-#RUN curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > "$HOME/bin/repo"
-#RUN chmod a+x "$HOME/bin/repo"
-#RUN which repo
-
-# Entry point
-# ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/bin/bash"]
-
+# Set the entrypoint to the build script
+CMD ["/bin/bash", "/usr/local/bin/build.sh"]
+# CMD ["/bin/bash"] # for debugging
